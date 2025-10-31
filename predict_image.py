@@ -29,7 +29,7 @@ def predict_single_image():
         return
 
     # 进行推理
-    results = model(image_path, device=device)
+    results = model(image_path, device=device,imgsz=(384, 640))
     result = results[0]
     plotted_image = result.plot(
         conf=True,  # 显示置信度

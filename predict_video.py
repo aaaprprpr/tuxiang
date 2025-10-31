@@ -34,6 +34,9 @@ def predict_video():
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
+    # 创建视频写入器，用于保存分割结果
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    out_mask = cv2.VideoWriter('mask_output.mp4', fourcc, fps, (960, 540))
     frame_count = 0
 
     while True:
@@ -42,7 +45,7 @@ def predict_video():
             break
 
         # 进行推理
-        results = model(frame,device=device)
+        results = model(frame,device=device,imgsz=(384, 640))
         result = results[0]
         plotted_frame = result.plot(
         conf=True,  # 显示置信度
@@ -79,12 +82,14 @@ def predict_video():
                         )
                 
             cv2.imshow("All Segmented Persons", segmented_objects)
-
+        segmented_objects =cv2.resize(segmented_objects, (960, 540))
+        # out_mask.write(segmented_objects)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
     cap.release()
     cv2.destroyAllWindows()
+    out_mask.release()
     print(f"总共处理了 {frame_count} 帧")
 
 if __name__ == "__main__":
