@@ -8,7 +8,7 @@ image_path = "1.jpg"
 
 
 def predict_single_image():
-    model_path = "yolo11x-seg.pt"  
+    model_path = "yolo11n-seg.pt"  
     if not os.path.exists(model_path):
         print(f"模型文件 {model_path} 不存在")
         return
